@@ -1,6 +1,5 @@
 package io.github.jdouglas9025.socialmediaapi.entity;
 
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
@@ -16,9 +15,9 @@ public class UserEntity {
     private Integer age;
     //Relationships
     @Relationship(type = "FOLLOWS", direction = Relationship.Direction.OUTGOING)
-    private List<UserEntity> following = new ArrayList<>();
+    private final List<UserEntity> following = new ArrayList<>();
     @Relationship(type = "LIKES", direction = Relationship.Direction.OUTGOING)
-    private List<InterestEntity> likes = new ArrayList<>();
+    private final List<InterestEntity> likes = new ArrayList<>();
 
     public UserEntity(String username, Integer age) {
         this.username = username;

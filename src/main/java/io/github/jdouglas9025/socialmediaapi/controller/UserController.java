@@ -30,6 +30,11 @@ public class UserController {
         return userRepository.findById(username);
     }
 
+    @GetMapping("/getFollowers/{username}")
+    public Flux<UserEntity> getFollowers(@PathVariable String username) {
+        return userRepository.findFollowers(username);
+    }
+
     @PostMapping("/createUser")
     public Mono<UserEntity> createUser(@RequestParam String username, @RequestParam Integer age) {
         UserEntity userEntity = new UserEntity(username, age);
@@ -38,12 +43,12 @@ public class UserController {
     }
 
     @PostMapping("/followUser")
-    public Mono<UserEntity> followUser(@RequestParam String source, String target) {
+    public Mono<String> followUser(@RequestParam String source, String target) {
         return userRepository.saveFollow(source, target);
     }
 
     @PostMapping("/likeInterest")
-    public Mono<UserEntity> likeInterest(@RequestParam String username, String interest) {
+    public Mono<String> likeInterest(@RequestParam String username, String interest) {
         return userRepository.saveLike(username, interest);
     }
 }
