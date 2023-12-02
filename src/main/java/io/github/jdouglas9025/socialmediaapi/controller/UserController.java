@@ -2,6 +2,7 @@ package io.github.jdouglas9025.socialmediaapi.controller;
 
 import io.github.jdouglas9025.socialmediaapi.entity.UserEntity;
 import io.github.jdouglas9025.socialmediaapi.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -15,6 +16,7 @@ public class UserController {
     //Inject instance of repository interface to call methods on DB
     private final UserRepository userRepository;
 
+    @Autowired
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -25,19 +27,18 @@ public class UserController {
         return userRepository.findAll();
     }
 
-    @GetMapping("/getUser/{username}")
-    public Mono<UserEntity> getUser(@PathVariable String username) {
-        return userRepository.findById(username);
+    @GetMapping("/getUser")
+    public Mono<UserEntity> getUser(@RequestParam String username) {
+        return userRepository.findOneByUsername(username);
     }
 
-    @GetMapping("/getFollowers/{username}")
-    public Flux<UserEntity> getFollowers(@PathVariable String username) {
+    @GetMapping("/getFollowers")
+    public Flux<UserEntity> getFollowers(@RequestParam String username) {
         return userRepository.findFollowers(username);
     }
 
     @PostMapping("/createUser")
-    public Mono<UserEntity> createUser(@RequestParam String username, @RequestParam Integer age) {
-        UserEntity userEntity = new UserEntity(username, age);
+    public Mono<UserEntity> createUser(@RequestBody UserEntity userEntity) {
         //Creates the user and returns it as a response
         return userRepository.save(userEntity);
     }

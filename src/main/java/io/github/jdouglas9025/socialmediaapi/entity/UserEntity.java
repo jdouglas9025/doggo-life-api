@@ -12,28 +12,40 @@ public class UserEntity {
     //Attributes
     @Id
     private final String username;
-    private Integer age;
+    private final String name;
+    private final String breed;
+    private final Long age;
     //Relationships
     @Relationship(type = "FOLLOWS", direction = Relationship.Direction.OUTGOING)
-    private final List<UserEntity> following = new ArrayList<>();
+    private final List<UserEntity> following;
     @Relationship(type = "LIKES", direction = Relationship.Direction.OUTGOING)
-    private final List<InterestEntity> likes = new ArrayList<>();
+    private final List<InterestEntity> likes;
 
-    public UserEntity(String username, Integer age) {
+    //Initialize all fields upon construction (including lists)
+    public UserEntity(String username, String name, String breed, Long age, List<UserEntity> following, List<InterestEntity> likes) {
         this.username = username;
+        this.name = name;
+        this.breed = breed;
         this.age = age;
+        this.following = following;
+        this.likes = likes;
     }
 
+    //Need getter() methods for parsing
     public String getUsername() {
         return username;
     }
 
-    public int getAge() {
-        return age;
+    public String getName() {
+        return name;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public String getBreed() {
+        return breed;
+    }
+
+    public Long getAge() {
+        return age;
     }
 
     public List<UserEntity> getFollowing() {

@@ -5,15 +5,21 @@ import org.springframework.data.neo4j.core.schema.Node;
 
 @Node("Interest")
 public class InterestEntity {
-    //Attributes
-    @Id
-    private final String value;
+        //Attributes
+        @Id
+        private final String name;
+        private final String category;
 
-    public InterestEntity(String value) {
-        this.value = value;
-    }
+        public InterestEntity(String name, String category) {
+                this.name = name;
+                this.category = category;
+        }
 
-    public String getValue() {
-        return value;
-    }
+        public String getName() {
+                return name;
+        }
+
+        public String getCategory() {
+                return category;
+        }
 }
