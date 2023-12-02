@@ -1,7 +1,7 @@
 package io.github.jdouglas9025.socialmediaapi.controller;
 
 import io.github.jdouglas9025.socialmediaapi.entity.UserEntity;
-import io.github.jdouglas9025.socialmediaapi.repository.UserRepository;
+import io.github.jdouglas9025.socialmediaapi.repository.graph.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -9,6 +9,7 @@ import reactor.core.publisher.Mono;
 
 //@RestController includes @ResponseBody annotation implicitly to return method responses as a response body (e.g., JSON)
 //@RequestMapping allows us to specify an additional URI base path for all requests in this class
+//Use primary transaction manager bean as default
 @RestController
 @RequestMapping("/users")
 public class UserController {

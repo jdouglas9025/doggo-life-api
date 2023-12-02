@@ -1,4 +1,4 @@
-package io.github.jdouglas9025.socialmediaapi.repository;
+package io.github.jdouglas9025.socialmediaapi.repository.graph;
 
 import io.github.jdouglas9025.socialmediaapi.entity.UserEntity;
 import org.springframework.data.neo4j.repository.ReactiveNeo4jRepository;
