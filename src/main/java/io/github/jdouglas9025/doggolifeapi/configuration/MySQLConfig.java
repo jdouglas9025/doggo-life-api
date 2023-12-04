@@ -1,4 +1,4 @@
-package io.github.jdouglas9025.socialmediaapi.configuration;
+package io.github.jdouglas9025.doggolifeapi.configuration;
 
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -13,12 +13,11 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableJpaRepositories(
-        basePackages = "io.github.jdouglas9025.socialmediaapi.repository.relational",
+        basePackages = "io.github.jdouglas9025.doggolifeapi.repository.relational",
         transactionManagerRef = "jpaTransactionManager"
 )
 @EnableTransactionManagement
 public class MySQLConfig {
-    //MySQL configuration:
     @Bean(name = "mysql")
     @ConfigurationProperties(prefix = "spring.mysql")
     public DataSource dataSource() {

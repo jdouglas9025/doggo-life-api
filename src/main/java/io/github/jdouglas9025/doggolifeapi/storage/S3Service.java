@@ -1,4 +1,4 @@
-package io.github.jdouglas9025.socialmediaapi.storage;
+package io.github.jdouglas9025.doggolifeapi.storage;
 
 import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSCredentials;
@@ -7,6 +7,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -28,15 +29,21 @@ public class S3Service {
             System.getenv("awsSecretKey")
     );
     private static final Regions region = Regions.US_EAST_2;
-    private static final String bucket = "doggo-life-posts-images-bucket";
+    private static final String bucket = System.getenv("bucketName");
     private static final AmazonS3 client = AmazonS3ClientBuilder
             .standard()
             .withCredentials(new AWSStaticCredentialsProvider(credentials))
             .withRegion(region)
             .build();
-    private static final String baseUrl = "https://doggo-life-posts-images-bucket.s3.us-east-2.amazonaws.com/";
+    private static final String baseUrl = System.getenv("baseUrl");
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss");
 
+    /**
+     * Uploads the specified file (e.g., image) to the standard AWS S3 bucket
+     *
+     * @param file the file to upload
+     * @return a URI reference to the object in S3
+     */
     public static String uploadObject(FilePart file) {
         try {
             //Set key based on timestamp + file name
@@ -58,6 +65,13 @@ public class S3Service {
         }
     }
 
+    /**
+     * Utility method for getting an input stream from a Flux of type DataBuffer
+     *
+     * @param data the Flux of type DataBuffer to create an input stream from
+     * @return an input stream based off the supplied argument
+     * @throws IOException if an IO exception is encountered during processing
+     */
     private static InputStream getInputStreamFromFluxDataBuffer(Flux<DataBuffer> data) throws IOException {
         PipedOutputStream osPipe = new PipedOutputStream();
         PipedInputStream isPipe = new PipedInputStream(osPipe);
@@ -75,9 +89,15 @@ public class S3Service {
         return isPipe;
     }
 
-    public static File downloadObject(String imageRef) {
+    /**
+     * Downloads the specified object from the standard AWS S3 bucket
+     *
+     * @param reference a URI reference to the object in S3
+     * @return a file representing the retrieved object
+     */
+    public static File downloadObject(String reference) {
         try {
-            String key = Path.of(imageRef).getFileName().toString();
+            String key = Path.of(reference).getFileName().toString();
 
             //Download object back as byte array
             GetObjectRequest download = new GetObjectRequest(bucket, key);
@@ -93,6 +113,22 @@ public class S3Service {
             return file;
         } catch (SdkClientException | IOException e) {
             return null;
+        }
+    }
+
+    /**
+     * Deletes the specified object from the standard AWS S3 bucket
+     *
+     * @param reference a URI reference to the object in S3
+     */
+    public static void deleteObject(String reference) {
+        try {
+            String key = Path.of(reference).getFileName().toString();
+
+            //Delete object from bucket
+            DeleteObjectRequest deletion = new DeleteObjectRequest(bucket, key);
+            client.deleteObject(deletion);
+        } catch (SdkClientException ignored) {
         }
     }
 }

@@ -1,4 +1,4 @@
-package io.github.jdouglas9025.socialmediaapi.entity;
+package io.github.jdouglas9025.doggolifeapi.entity;
 
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;

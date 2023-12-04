@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>io.github.jdouglas9025</groupId>
-    <artifactId>SocialMediaAPI</artifactId>
+    <artifactId>DoggoLifeAPI</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>SocialMediaAPI</name>

@@ -1,20 +1,18 @@
-package io.github.jdouglas9025.socialmediaapi.controller;
+package io.github.jdouglas9025.doggolifeapi.controller;
 
-import io.github.jdouglas9025.socialmediaapi.entity.UserEntity;
-import io.github.jdouglas9025.socialmediaapi.repository.graph.UserRepository;
+import io.github.jdouglas9025.doggolifeapi.entity.UserEntity;
+import io.github.jdouglas9025.doggolifeapi.repository.graph.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-//@RestController includes @ResponseBody annotation implicitly to return method responses as a response body (e.g., JSON)
+//@RestController includes @ResponseBody implicitly to return method responses as a response body (e.g., JSON)
 //@RequestMapping allows us to specify an additional URI base path for all requests in this class
-//Use primary transaction manager bean as default
 @RestController
 @RequestMapping("/users")
 public class UserController {
-
-    //Inject instance of repository interface to call methods on DB
+    //Inject instance of graph repository interface to call methods on DB
     private final UserRepository userRepository;
 
     @Autowired
@@ -22,7 +20,6 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    //Endpoints
     @GetMapping("/getUsers")
     public Flux<UserEntity> getUsers() {
         return userRepository.findAll();
@@ -45,12 +42,12 @@ public class UserController {
     }
 
     @PostMapping("/followUser")
-    public Mono<String> followUser(@RequestParam String source, String target) {
+    public Flux<UserEntity> followUser(@RequestParam String source, String target) {
         return userRepository.saveFollow(source, target);
     }
 
     @PostMapping("/likeInterest")
-    public Mono<String> likeInterest(@RequestParam String username, String interest) {
+    public Flux<UserEntity> likeInterest(@RequestParam String username, String interest) {
         return userRepository.saveLike(username, interest);
     }
 }

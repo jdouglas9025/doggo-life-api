@@ -1,4 +1,4 @@
-package io.github.jdouglas9025.socialmediaapi.configuration;
+package io.github.jdouglas9025.doggolifeapi.configuration;
 
 import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.Driver;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableNeo4jRepositories(
-        basePackages = "io.github.jdouglas9025.socialmediaapi.repository.graph",
+        basePackages = "io.github.jdouglas9025.doggolifeapi.repository.graph",
         transactionManagerRef = "reactiveTransactionManager"
 )
 @EnableTransactionManagement
