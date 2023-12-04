@@ -3,6 +3,8 @@ package io.github.jdouglas9025.doggolifeapi.controller;
 import io.github.jdouglas9025.doggolifeapi.entity.UserEntity;
 import io.github.jdouglas9025.doggolifeapi.repository.graph.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -42,12 +44,12 @@ public class UserController {
     }
 
     @PostMapping("/followUser")
-    public Flux<UserEntity> followUser(@RequestParam String source, String target) {
+    public Mono<String> followUser(@RequestParam String source, String target) {
         return userRepository.saveFollow(source, target);
     }
 
     @PostMapping("/likeInterest")
-    public Flux<UserEntity> likeInterest(@RequestParam String username, String interest) {
+    public Mono<String> likeInterest(@RequestParam String username, String interest) {
         return userRepository.saveLike(username, interest);
     }
 }

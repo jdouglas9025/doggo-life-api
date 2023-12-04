@@ -22,26 +22,26 @@ public interface UserRepository extends ReactiveNeo4jRepository<UserEntity, Stri
      *
      * @param source the username of the source (originating) user
      * @param target the username of the target user
-     * @return a Flux of type UserEntity representing the two users
+     * @return a Mono of type String with a success message
      */
-    @Query("MATCH path=(source:User), (target:User) " +
+    @Query("MATCH (source:User), (target:User) " +
             "WHERE source.username = $source AND target.username = $target " +
             "CREATE (source)-[:FOLLOWS]->(target) " +
-            "RETURN source, collect(nodes(path)), collect(relationships(path))")
-    Flux<UserEntity> saveFollow(String source, String target);
+            "RETURN 'Success'")
+    Mono<String> saveFollow(String source, String target);
 
     /**
      * Creates a "LIKES" relationship from the user to the interest
      *
      * @param username the username of the user
      * @param interest the name of the interest
-     * @return a Flux of type UserEntity representing the user
+     * @return a Mono of type String with a success message
      */
-    @Query("MATCH path=(user:User), (interest:Interest) " +
+    @Query("MATCH (user:User), (interest:Interest) " +
             "WHERE user.username = $username AND interest.name = $interest " +
             "CREATE (user)-[:LIKES]->(interest) " +
-            "RETURN user, collect(nodes(path)), collect(relationships(path))")
-    Flux<UserEntity> saveLike(String username, String interest);
+            "RETURN 'Success'")
+    Mono<String> saveLike(String username, String interest);
 
     /**
      * Retrieves the list of users who are following the specified user

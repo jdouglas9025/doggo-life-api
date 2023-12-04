@@ -54,7 +54,7 @@ public class PostController {
     }
 
     @DeleteMapping(value = "/deletePost")
-    public ResponseEntity<PostEntity> deletePost(@RequestParam Integer id) {
+    public ResponseEntity<String> deletePost(@RequestParam Integer id) {
         Optional<PostEntity> post = postRepository.findById(id);
 
         //Check if post not found
@@ -69,7 +69,7 @@ public class PostController {
         //Delete post from DB
         postRepository.deleteById(id);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
     //Get posts from users who this user follows
