@@ -20,6 +20,7 @@ Neo4j graph database, MySQL relational database, AWS S3
 ### Posts (Relational Database) Endpoints
 #### Get Posts
 URI: /posts/getPosts | Summary: retrieves all posts from the relational database and provides a response with a list of PostEntity objects
+
 <img width="468" alt="image" src="https://github.com/jdouglas9025/doggo-life-api/assets/111395383/134fb710-15b2-45df-bc17-f9ad6023e6da">
 
 #### Get Posts by User
@@ -79,4 +80,4 @@ URI: /users/likeInterest | Query Params: username, interest | Summary: likes the
 <img width="468" alt="image" src="https://github.com/jdouglas9025/doggo-life-api/assets/111395383/53b3b912-8918-4970-9fa3-557fa96e7850">
 
 
-Additional endpoints coming soon. Stay tuned!
+Additional endpoints and other features coming soon. Stay tuned!
