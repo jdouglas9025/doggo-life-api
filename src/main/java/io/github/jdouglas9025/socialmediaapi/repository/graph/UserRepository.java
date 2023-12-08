@@ -1,6 +1,6 @@
-package io.github.jdouglas9025.doggolifeapi.repository.graph;
+package io.github.jdouglas9025.socialmediaapi.repository.graph;
 
-import io.github.jdouglas9025.doggolifeapi.entity.UserEntity;
+import io.github.jdouglas9025.socialmediaapi.entity.UserEntity;
 import org.springframework.data.neo4j.repository.ReactiveNeo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.stereotype.Repository;
@@ -9,6 +9,14 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public interface UserRepository extends ReactiveNeo4jRepository<UserEntity, String> {
+    /**
+     * This derived method finds a user based on their immutable user ID
+     *
+     * @param userId the userId of the target user
+     * @return a Mono object of type UserEntity representing the user
+     */
+    Mono<UserEntity> findOneByUserId(String userId);
+
     /**
      * This derived method finds a user based on their username
      *

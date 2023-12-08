@@ -1,4 +1,4 @@
-package io.github.jdouglas9025.doggolifeapi;
+package io.github.jdouglas9025.socialmediaapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

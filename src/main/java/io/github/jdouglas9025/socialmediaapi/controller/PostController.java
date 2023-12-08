@@ -1,9 +1,9 @@
-package io.github.jdouglas9025.doggolifeapi.controller;
+package io.github.jdouglas9025.socialmediaapi.controller;
 
-import io.github.jdouglas9025.doggolifeapi.entity.PostEntity;
-import io.github.jdouglas9025.doggolifeapi.repository.graph.UserRepository;
-import io.github.jdouglas9025.doggolifeapi.repository.relational.PostRepository;
-import io.github.jdouglas9025.doggolifeapi.storage.S3Service;
+import io.github.jdouglas9025.socialmediaapi.entity.PostEntity;
+import io.github.jdouglas9025.socialmediaapi.repository.graph.UserRepository;
+import io.github.jdouglas9025.socialmediaapi.repository.relational.PostRepository;
+import io.github.jdouglas9025.socialmediaapi.storage.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +16,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/posts")
 public class PostController {
+    //Note: for all requests, Spring has already confirmed that user's JWT token is valid by checking relevant JWT properties through Google
+    //In a production application, we would also want to verify that the caller is in a trusted list of users
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
@@ -42,12 +44,12 @@ public class PostController {
     //Use FilePart over MultiFilePart since using Webflux
     //Use RequestPart over RequestParam
     @PostMapping(value = "/createPost")
-    public ResponseEntity<PostEntity> createPost(@RequestParam String username, @RequestParam String caption, @RequestPart("image") FilePart image) {
+    public ResponseEntity<PostEntity> createPost(@RequestParam String userId, @RequestParam String username, @RequestParam String caption, @RequestPart("image") FilePart image) {
         //Upload image to S3
         String imageRef = S3Service.uploadObject(image);
 
         //Create post in database
-        PostEntity post = postRepository.save(new PostEntity(username, caption, imageRef));
+        PostEntity post = postRepository.save(new PostEntity(userId, username, caption, imageRef));
 
         //Return result and success message
         return new ResponseEntity<>(post, HttpStatus.OK);
@@ -55,19 +57,21 @@ public class PostController {
 
     @DeleteMapping(value = "/deletePost")
     public ResponseEntity<String> deletePost(@RequestParam Integer id) {
-        Optional<PostEntity> post = postRepository.findById(id);
+        Optional<PostEntity> container = postRepository.findById(id);
 
         //Check if post not found
-        if (post.isEmpty()) {
+        if (container.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
+        PostEntity post = container.get();
+
         //Delete image from S3
-        String imageRef = post.get().getImageRef();
+        String imageRef = post.getImageRef();
         S3Service.deleteObject(imageRef);
 
         //Delete post from DB
-        postRepository.deleteById(id);
+        postRepository.delete(post);
 
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }

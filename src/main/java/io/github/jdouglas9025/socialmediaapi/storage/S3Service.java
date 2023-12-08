@@ -1,4 +1,4 @@
-package io.github.jdouglas9025.doggolifeapi.storage;
+package io.github.jdouglas9025.socialmediaapi.storage;
 
 import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSCredentials;
@@ -8,35 +8,44 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.codec.multipart.FilePart;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class S3Service {
-    private static final AWSCredentials credentials = new BasicAWSCredentials(
-            System.getenv("awsAccessKey"),
-            System.getenv("awsSecretKey")
-    );
     private static final Regions region = Regions.US_EAST_2;
-    private static final String bucket = System.getenv("bucketName");
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss");
+    @Value("${spring.aws.awsAccessKey}")
+    private static String awsAccessKey;
+    @Value("${spring.aws.awsSecretKey}")
+    private static String awsSecretKey;
+    private static final AWSCredentials credentials = new BasicAWSCredentials(
+            awsAccessKey,
+            awsSecretKey
+    );
     private static final AmazonS3 client = AmazonS3ClientBuilder
             .standard()
             .withCredentials(new AWSStaticCredentialsProvider(credentials))
             .withRegion(region)
             .build();
-    private static final String baseUrl = System.getenv("baseUrl");
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss");
+    @Value("${spring.aws.bucketName}")
+    private static String bucket;
+    @Value("${spring.aws.baseUrl}")
+    private static String baseUrl;
 
     /**
      * Uploads the specified file (e.g., image) to the standard AWS S3 bucket
@@ -87,33 +96,6 @@ public class S3Service {
                 .subscribe(DataBufferUtils.releaseConsumer());
 
         return isPipe;
-    }
-
-    /**
-     * Downloads the specified object from the standard AWS S3 bucket
-     *
-     * @param reference a URI reference to the object in S3
-     * @return a file representing the retrieved object
-     */
-    public static File downloadObject(String reference) {
-        try {
-            String key = Path.of(reference).getFileName().toString();
-
-            //Download object back as byte array
-            GetObjectRequest download = new GetObjectRequest(bucket, key);
-            byte[] data = client.getObject(download).getObjectContent().readAllBytes();
-
-            //Write contents to file with key as file name
-            File file = new File(key);
-            OutputStream stream = new FileOutputStream(file);
-
-            stream.write(data);
-            stream.close();
-
-            return file;
-        } catch (SdkClientException | IOException e) {
-            return null;
-        }
     }
 
     /**

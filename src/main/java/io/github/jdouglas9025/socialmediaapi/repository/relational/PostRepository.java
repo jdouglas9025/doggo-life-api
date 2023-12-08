@@ -1,6 +1,6 @@
-package io.github.jdouglas9025.doggolifeapi.repository.relational;
+package io.github.jdouglas9025.socialmediaapi.repository.relational;
 
-import io.github.jdouglas9025.doggolifeapi.entity.PostEntity;
+import io.github.jdouglas9025.socialmediaapi.entity.PostEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

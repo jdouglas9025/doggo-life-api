@@ -1,4 +1,4 @@
-package io.github.jdouglas9025.doggolifeapi.configuration;
+package io.github.jdouglas9025.socialmediaapi.configuration;
 
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableJpaRepositories(
-        basePackages = "io.github.jdouglas9025.doggolifeapi.repository.relational",
+        basePackages = "io.github.jdouglas9025.socialmediaapi.repository.relational",
         transactionManagerRef = "jpaTransactionManager"
 )
 @EnableTransactionManagement
